@@ -623,7 +623,7 @@ export default function Home() {
                   name: "Amit Singh",
                   role: "Data Analyst at FinService",
                   image: "https://randomuser.me/api/portraits/men/67.jpg",
-                  testimonial: "As a recent graduate, I was struggling to find entry-level positions. The 'Fresh Graduate' filter on NamasteJobs showed me exactly what I needed."
+                  testimonial: "As a recent graduate, I was struggling to find entry-level positions. The Fresh Graduate filter on NamasteJobs showed me exactly what I needed."
                 }
               ].map((testimonial, index) => (
                 <motion.div
