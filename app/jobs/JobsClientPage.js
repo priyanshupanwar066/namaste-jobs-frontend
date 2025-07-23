@@ -34,7 +34,7 @@ const JobsClientPage = () => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
   
-        const res = await fetch(`http://localhost:8000/api/jobs?${params}`, {
+        const res = await fetch(`https://namaste-jobs-backend.onrender.com/`, {
           signal: controller.signal
         });
         
