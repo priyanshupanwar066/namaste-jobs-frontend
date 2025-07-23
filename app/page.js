@@ -662,7 +662,7 @@ export default function Home() {
       >
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Find Your Dream Job?</h2>
-          <p className="text-lg text-indigo-100 mb-8">Join thousands of job seekers who've found their perfect career match on NamasteJobs</p>
+          <p className="text-lg text-indigo-100 mb-8">Join thousands of job seekers who found their perfect career match on NamasteJobs</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link 
               href="/jobs" 
