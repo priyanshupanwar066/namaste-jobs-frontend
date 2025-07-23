@@ -28,14 +28,14 @@ const JobsClientPage = () => {
           page: currentPage,
           limit: jobsPerPage,
           ...(category && { category }),
-          ...(location && { location })
+          ...(location && { location }),
         });
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-        // ✅ FIXED: Correct API URL
-        const res = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs?${params}`, {
+        // ✅ CORRECTED API ENDPOINT
+        const res = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs?${params.toString()}`, {
           signal: controller.signal,
         });
 
@@ -47,14 +47,14 @@ const JobsClientPage = () => {
         }
 
         const data = await res.json();
-        console.log("Fetched Jobs: ", data); // For debugging
+        console.log("✅ Fetched Jobs:", data);
 
         setJobs(data.jobs || []);
         setTotalPages(data.totalPages || 1);
         setTotalJobs(data.totalJobs || 0);
       } catch (error) {
-        console.error("Fetch Error:", error);
-        setError(error.message || 'Failed to connect to server. Check your internet connection and try again.');
+        console.error("❌ Fetch Error:", error);
+        setError(error.message || 'Failed to connect to server.');
         setJobs([]);
       } finally {
         setLoading(false);
@@ -67,7 +67,7 @@ const JobsClientPage = () => {
   const renderPagination = () => (
     <div className="flex justify-center mt-8 space-x-2">
       <button
-        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
         disabled={currentPage === 1}
         className="px-4 py-2 bg-gray-100 rounded-md disabled:opacity-50 hover:bg-gray-200"
       >
@@ -78,14 +78,14 @@ const JobsClientPage = () => {
         <button
           key={i + 1}
           onClick={() => setCurrentPage(i + 1)}
-          className={`px-4 py-2 ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-100'} rounded-md`}
+          className={`px-4 py-2 ${currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-100"} rounded-md`}
         >
           {i + 1}
         </button>
       ))}
 
       <button
-        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
         disabled={currentPage === totalPages}
         className="px-4 py-2 bg-gray-100 rounded-md disabled:opacity-50 hover:bg-gray-200"
       >
@@ -174,10 +174,11 @@ const JobsClientPage = () => {
                   <div className="flex items-center text-gray-400 text-sm">
                     <Clock className="h-4 w-4 mr-1" />
                     <span>
-                      Posted: {new Date(job.createdAt).toLocaleDateString('en-IN', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
+                      Posted:{" "}
+                      {new Date(job.createdAt).toLocaleDateString("en-IN", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
                       })}
                     </span>
                   </div>
@@ -201,7 +202,7 @@ const JobsClientPage = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-2">No Jobs Found</h2>
           <p className="text-gray-600 mb-6">Try adjusting your filters or check back later</p>
           <button
-            onClick={() => router.push('/jobs')}
+            onClick={() => router.push("/jobs")}
             className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all"
           >
             Browse All Jobs
