@@ -154,7 +154,7 @@ export default function Home() {
             Apna Future Banao!
           </h1>
           <p className="text-lg font-medium italic">
-            "Aaj ka ek sahi decision, kal ka best future ban sakta hai!"
+            Aaj ka ek sahi decision, kal ka best future ban sakta hai
           </p>
 
           {/* Buttons */}
