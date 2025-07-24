@@ -34,11 +34,10 @@ const JobsPage = () => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-        const res = await fetch(
-          `https://namaste-jobs-backend.onrender.com/api/jobs?${params}`,
-          {
-            signal: controller.signal,
-          }
+        const response = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs/${id}`, {
+  credentials: "include",
+});
+
         );
 
         clearTimeout(timeoutId);
