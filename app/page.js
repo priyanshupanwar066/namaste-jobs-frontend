@@ -42,10 +42,10 @@ export default function Home() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = fetch(`https://namaste-jobs-backend.onrender.com/api/jobs/${id}`);
-, {
-          credentials: "include",
-        });
+        const response = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs/${id}`, {
+  credentials: "include",
+});
+
         if (!response.ok) throw new Error("Failed to fetch jobs");
 
         const data = await response.json();
