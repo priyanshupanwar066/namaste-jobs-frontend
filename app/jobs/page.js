@@ -34,11 +34,10 @@ const JobsPage = () => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-        const response = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs/${id}`, {
-  credentials: "include",
-});
-
-        );
+        const res = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs?${params}`, {
+          signal: controller.signal,
+          credentials: "include",
+        });
 
         clearTimeout(timeoutId);
 
@@ -54,8 +53,7 @@ const JobsPage = () => {
       } catch (error) {
         console.error("Fetch Error:", error);
         setError(
-          error.message ||
-            "Failed to connect to server. Check your internet connection and try again."
+          error.message || "Failed to connect to server. Check your internet connection and try again."
         );
         setJobs([]);
       } finally {
@@ -104,6 +102,7 @@ const JobsPage = () => {
       animate={{ opacity: 1 }}
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24"
     >
+      {/* Error Display */}
       {error && (
         <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
           Error: {error}
@@ -140,8 +139,8 @@ const JobsPage = () => {
               <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
               <div className="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
               <div className="space-y-3">
-                {[...Array(4)].map((_, j) => (
-                  <div key={j} className="h-3 bg-gray-200 rounded"></div>
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-3 bg-gray-200 rounded"></div>
                 ))}
               </div>
             </div>
@@ -159,7 +158,9 @@ const JobsPage = () => {
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-800 mb-2">{job.title}</h2>
+                  <h2 className="text-xl font-bold text-gray-800 mb-2">
+                    {job.title}
+                  </h2>
                   <div className="flex items-center text-blue-600 mb-3">
                     <Briefcase className="h-5 w-5 mr-2" />
                     <span className="font-medium">{job.company}</span>
@@ -210,9 +211,7 @@ const JobsPage = () => {
         <div className="text-center py-20">
           <AlertCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">No Jobs Found</h2>
-          <p className="text-gray-600 mb-6">
-            Try adjusting your filters or check back later
-          </p>
+          <p className="text-gray-600 mb-6">Try adjusting your filters or check back later</p>
           <button
             onClick={() => router.push("/jobs")}
             className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all"
