@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Briefcase, MapPin, Banknote, Clock, AlertCircle, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
-const JobsPage = () => {
+// Main content component that uses searchParams
+const JobsPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "";
@@ -34,13 +35,12 @@ const JobsPage = () => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-       const res = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs?${params}`, {
-  signal: controller.signal,
-  credentials: "include",
-});
+        const res = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs?${params}`, {
+          signal: controller.signal,
+          credentials: "include",
+        });
 
-clearTimeout(timeoutId); // ✅ continue with the next line
-
+        clearTimeout(timeoutId);
 
         if (!res.ok) {
           const errorData = await res.json();
@@ -224,6 +224,19 @@ clearTimeout(timeoutId); // ✅ continue with the next line
 
       {!loading && jobs.length > 0 && renderPagination()}
     </motion.div>
+  );
+};
+
+// Main page component with Suspense boundary
+const JobsPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    }>
+      <JobsPageContent />
+    </Suspense>
   );
 };
 
