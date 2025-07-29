@@ -20,45 +20,54 @@ const JobsPageContent = () => {
   const jobsPerPage = 10;
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+ // Replace the entire fetchJobs function with:
+const fetchJobs = async () => {
+  try {
+    setLoading(true);
+    setError(null);
 
-        const params = new URLSearchParams({
-          page: currentPage,
-          limit: jobsPerPage,
-          ...(category && { category }),
-          ...(location && { location }),
-        });
+    // Construct proper query parameters
+    const params = new URLSearchParams({
+      limit: jobsPerPage,
+      page: currentPage,
+      ...(category && { category }),
+      ...(location && { location })
+    });
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-         const response = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs?limit=30`, {
-          credentials: "include",
-        });
-        clearTimeout(timeoutId);
-
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
-        }
-
-        const data = await res.json();
-        setJobs(data.jobs || []);
-        setTotalPages(data.totalPages || 1);
-        setTotalJobs(data.totalJobs || 0);
-      } catch (error) {
-        console.error("Fetch Error:", error);
-        setError(
-          error.message || "Failed to connect to server. Check your internet connection and try again."
-        );
-        setJobs([]);
-      } finally {
-        setLoading(false);
+    // Use the constructed parameters
+    const res = await fetch(
+      `https://namaste-jobs-backend.onrender.com/api/jobs?${params.toString()}`,
+      {
+        signal: controller.signal
       }
-    };
+    );
+    
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+    
+    // Adjust based on your actual API response structure:
+    setJobs(data.jobs || data); // Use whichever matches your API
+    setTotalPages(data.totalPages || 1);
+    setTotalJobs(data.totalJobs || data.length);
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    setError(
+      error.message || "Failed to connect to server. Check your internet connection and try again."
+    );
+    setJobs([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchJobs();
   }, [category, location, currentPage]);
