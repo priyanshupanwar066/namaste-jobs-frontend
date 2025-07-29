@@ -42,7 +42,7 @@ export default function Home() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs/${id}`, {
+        const response = await fetch(`https://namaste-jobs-backend.onrender.com/api/jobs`, {
   credentials: "include",
 });
 
