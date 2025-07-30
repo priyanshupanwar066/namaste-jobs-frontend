@@ -17,27 +17,40 @@ export default function RegisterPage() {
   const { login } = useAuth();
   const router = useRouter();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
+// Update the handleRegister function
+const handleRegister = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  setError("");
+  
+  try {
+    const res = await api.post("/auth/register", {
+      name,
+      email,
+      password,
+      phone,
+      role,
+    });
     
-    try {
-      const res = await api.post("/auth/register", {
-        name,
-        email,
-        password,
-        phone,
-        role,
-      });
-      login(res.data.user);
+    // Check for successful response
+    if (res.data && res.data.user) {
+      login(res.data.user, res.data.token); // Pass token to login
       router.push("/profile");
-    } catch (err) {
-      setError(err.response?.data?.error || "Registration failed. Please try again.");
-    } finally {
-      setIsLoading(false);
+    } else {
+      throw new Error("Invalid response from server");
     }
-  };
+  } catch (err) {
+    // Improved error handling
+    const errorMessage = err.response?.data?.error || 
+                         err.response?.data?.message || 
+                         err.message || 
+                         "Registration failed. Please try again.";
+    
+    setError(errorMessage);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="mt-10 min-h-screen flex items-center justify-center p-4">
