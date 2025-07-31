@@ -17,7 +17,7 @@ export default function LoginPage() {
     setError("");
     
     try {
-      const res = await fetch("http://localhost:8000/api/auth/login", {
+      const res = await fetch("https://namaste-jobs-frontend-2x3odc17e-priyanshu-panwars-projects.vercel.app/login, {
         method: "POST",
         credentials: "include",
         headers: {
